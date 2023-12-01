@@ -1,0 +1,14 @@
+{
+    // Python linter settings
+    "flake8.path": [
+        "${workspaceFolder}/.env/bin/flake8",
+        "--max-line-length=120",
+        "--ignore=E402,F841,F401,E302,E305,W503",
+    ],
+    "flake8.cwd": "${workspaceFolder}",
+    "flake8.interpreter": ["${workspaceFolder}/.env/bin/python"],
+    // Editor basic settings
+    "editor.renderWhitespace": "all",
+    "editor.trimAutoWhitespace": true,
+    "editor.rulers": [80, 100, 120],
+}
