@@ -2,9 +2,7 @@ import pygame as pg
 import pygame.draw
 import pygame.locals
 
-from pygame_widgets.slider import Slider
-from pygame_widgets.button import Button
-from pygame_widgets.textbox import TextBox
+import pygame_widgets
 
 def get_car_image(file, size):
     image = pygame.image.load()
