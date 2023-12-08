@@ -35,13 +35,6 @@ def get_car_image(filename, size, angle):
     image = pygame.transform.rotate(image, angle)
     return image
 
-def choose_car():
-    car = ''
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_1]:
-        car = "supra"
-    return car
-
 
 road_image = pygame.image.load('traffic/images/racetrack.jpg')
 road_image = pygame.transform.scale(road_image, (800, 800))
@@ -77,9 +70,8 @@ def draw_all():
     traffic_cars_group.draw(screen)
     my_car.draw(screen)
 
-def draw_start_menu():
+def draw_start_menu(menu):
     """стартовое меню"""
-    menu = pygame.image.load('traffic/images/menubackground.png')
     menu_image = pygame.transform.scale(menu, (800, 800))
     screen.blit(menu_image, (0, 0))
     pygame.display.update()
@@ -87,7 +79,9 @@ def draw_start_menu():
 
 
 running = True
-game_state = "start_menu"
+menu1 = pygame.image.load('traffic/images/menubackground.png')
+menu2 = pygame.image.load('traffic/images/menuback2.png')
+game_state = "choose_car"
 supra_image = get_car_image('traffic/images/supra.png', (90, 211), 0)
 supra = MyCar((500, 600), supra_image)
 civic_image = get_car_image('traffic/images/civic.png', (90, 197), 0)
@@ -111,22 +105,26 @@ while running:
     
     #todo машинки спавнятся когда сидишь в меню - исправить!
                 
-    if game_state == "start_menu":
+    if game_state == "choose_car":
         keys = pygame.key.get_pressed()
-        draw_start_menu()
+        draw_start_menu(menu1)
         if keys[pygame.K_1]:
-            game_state = 'game_start'
+            game_state = 'choose_track'
             my_car = supra
         if keys[pygame.K_2]:
-            game_state = 'game_start'
+            game_state = 'choose_track'
             my_car = civic
         if keys[pygame.K_3]:
-            game_state = 'game_start'
+            game_state = 'choose_track'
             my_car = r34
-
+    if game_state == 'choose_track':
+        keys2 = pygame.key.get_pressed()
+        draw_start_menu(menu2)
+        if keys2[pygame.K_1]:
+            game_state = 'game_start'
+            # my_car = supra
 
     if game_state == "game_start":
-        keys = pygame.key.get_pressed()
         
     
 
