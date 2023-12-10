@@ -13,17 +13,16 @@ screen = pygame.display.set_mode((500, 800))
 pygame.display.set_caption('Traffic racer')
 background_color = (0, 0, 0)
 
-my_car_sound = pygame.mixer.Sound('sounds/engine.wav')
+my_car_sound = pygame.mixer.Sound('traffic/sounds/engine.wav')
 my_car_sound.play(-1)
 
-crash_sound = pygame.mixer.Sound('sounds/crash.wav')
+crash_sound = pygame.mixer.Sound('traffic/sounds/crash.wav')
 
 font = pygame.freetype.Font(None, 20)
 
 road_group = pygame.sprite.Group()
 spawn_road_time = pygame.USEREVENT
 pygame.time.set_timer(spawn_road_time, 1000)
-
 traffic_cars_group = pygame.sprite.Group()
 spawn_traffic_time = pygame.USEREVENT + 1
 pygame.time.set_timer(spawn_traffic_time, 1000)
@@ -36,19 +35,19 @@ def get_car_image(filename, size, angle):
     return image
 
 
-my_car_image = get_car_image('images/mercedes.png', (100, 70), -90)
-road_image = pygame.image.load('images/road.png')
+my_car_image = get_car_image('traffic/images/mercedes.png', (100, 70), -90)
+road_image = pygame.image.load('traffic/images/road.png')
 road_image = pygame.transform.scale(road_image, (500, 800))
 
 traffic_car_images = []
-traffic_car1 = get_car_image('images/traffic_car1.png', (100, 70), 90)
-traffic_car2 = get_car_image('images/traffic_car2.png', (100, 70), -90)
-traffic_car3 = get_car_image('images/traffic_car3.png', (100, 70), -90)
+traffic_car1 = get_car_image('traffic/images/traffic_car1.png', (100, 70), 90)
+traffic_car2 = get_car_image('traffic/images/traffic_car2.png', (100, 70), -90)
+traffic_car3 = get_car_image('traffic/images/traffic_car3.png', (100, 70), -90)
 traffic_car_images.extend((traffic_car1, traffic_car2, traffic_car3))
 
-road = Road(road_image, (250, 400))
+road = Road(road_image, (250, -400))
 road_group.add(road)
-road = Road(road_image, (250, 0))
+road = Road(road_image, (250, 400))
 road_group.add(road)
 
 

@@ -1,44 +1,62 @@
-class Object:    
-    def __init__(
-        self,
-        x: float = 0,
-        y: float = 0,
-        v: float = 0,
-    )->None:
-        self.x = x
-        self.y = y
-        self.v = v
+import pygame
 
-class Car(Object):
-    def __init__(
-        self,
-        type: str = "civic",
-        len: float = 10,
-        width: float = 5,
-        *args, 
-        **kwargs
-    )->None:
-        super().__init__(**kwargs)
-        self.type = type
-        self.len = len
-        self.width = width
 
-class Item(Object):
-    def __init__(
-        self,
-        type: str = "money",
-        r: float = 5,
-        *args,
-        **kwargs
-    )->None:
-        super().__init__(**kwargs)
-        self.type = type
-        self.r = r
+class Road(pygame.sprite.Sprite):
+    def __init__(self, image, position):
+        super().__init__()
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = position
+        self.speed = 15
 
-class Obsrtacle(Object):
-    def __init__(
-            self,
-            type: str = ""
-    )->None:
-        pass
-        
+    def remove(self):
+        if self.rect.top > 800:
+            self.kill()
+
+    def update(self):
+        self.rect.y += self.speed
+        self.remove()
+
+
+class MyCar:
+    def __init__(self, position, image):
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = position
+        self.game_status = 'game'
+
+    def border(self):
+        if self.rect.right > 800:
+            self.rect.right = 800
+        if self.rect.left < 0:
+            self.rect.left = 0
+
+    def move(self):
+        key = pygame.key.get_pressed()
+        speed = 6
+        if key[pygame.K_a]:
+            self.rect.x -= speed
+        if key[pygame.K_d]:
+            self.rect.x += speed
+        self.border()
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+
+class TrafficCar(pygame.sprite.Sprite):
+    def __init__(self, image, position, speed):
+        super().__init__()
+        self.speed = speed
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = position
+
+    def remove(self):
+        if self.rect.top > 800:
+            self.kill()
+
+    def update(self):
+        self.rect.y += self.speed
+        self.remove()
+
