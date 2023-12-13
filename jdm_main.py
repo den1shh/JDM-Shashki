@@ -3,7 +3,7 @@ import pygame
 import yaml
 import pandas as pd
 from modules.jdm_world import World
-from modules.jdm_objects import Road, MyCar, TrafficCar
+from modules.jdm_objects import Item, MyCar
 
 def load_cars():
     with open("configs/cars.yaml", "r") as file:
@@ -24,6 +24,12 @@ def crash(my_car, traffic_cars, world):
             sound.play()
             world.game_status = False
 
+def get_coin(my_car, world):
+    for coin in world.coins:
+        if coin.rect.colliderect(my_car.rect):
+            world.point += 1
+            coin.kill()
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
@@ -35,16 +41,23 @@ def main():
     font = pygame.freetype.Font(None, 20)
 
     spawn_road_time = pygame.USEREVENT
-    pygame.time.set_timer(spawn_road_time, 850)
+    pygame.time.set_timer(spawn_road_time, 500)
     spawn_traffic_time = pygame.USEREVENT + 1
     pygame.time.set_timer(spawn_traffic_time, 1000)
+    spawn_coin_time = pygame.USEREVENT + 2
+    pygame.time.set_timer(spawn_coin_time, 1000)
 
     cars = load_cars()
     my_car = MyCar((300, 600), cars['mercedes']['image'])
 
     road_image = pygame.image.load('img/road.png')
     road_image = pygame.transform.scale(road_image, (500, 800))
-    world = World(my_car = my_car, roads = [Road(road_image, (250, 400)), Road(road_image, (250, -400)), Road(road_image, (250, -1200))])
+    
+    coin_image = pygame.image.load('img/coin.png')
+    coin_image = pygame.transform.scale(coin_image, (50, 50))
+    
+    
+    world = World(my_car = my_car, roads = [Item(road_image, (250, 400), 15), Item(road_image, (250, -400), 15), Item(road_image, (250, -1200), 15)])
     
     while world.alive:
         for event in pygame.event.get():
@@ -54,14 +67,21 @@ def main():
                 world.spawn_road(road_image)
             if event.type == spawn_traffic_time:
                 world.spawn_traffic(cars)
+            if event.type == spawn_coin_time:
+                world.spawn_coin(coin_image)
 
         screen.fill(background_color)
         if world.game_status:
             my_car.move()
             world.draw_all(screen, my_car)
+            world.acceleration(pygame.time.get_ticks()/1000)
+            font.render_to(screen, (400, 30), str(world.time), (255, 255, 255))
             crash(my_car, world.traffic_cars, world)
+            get_coin(my_car, world)
         else:
             font.render_to(screen, (30, 300), 'Game Over', (255, 255, 255))
+            font.render_to(screen, (30, 330), 'Your time: ' + str(world.time), (255, 255, 255))
+            font.render_to(screen, (30, 360), 'Your score: ' + str(world.point), (255, 255, 255))
             sound.stop()
         
         pygame.display.flip()

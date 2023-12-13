@@ -1,23 +1,6 @@
 import pygame
 
 
-class Road(pygame.sprite.Sprite):
-    def __init__(self, image, position):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = position
-        self.speed = 15
-
-    def remove(self):
-        if self.rect.top > 800:
-            self.kill()
-
-    def update(self):
-        self.rect.y += self.speed
-        self.remove()
-
-
 class MyCar:
     def __init__(self, position, image):
         self.image = image
@@ -43,8 +26,7 @@ class MyCar:
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-
-class TrafficCar(pygame.sprite.Sprite):
+class Item(pygame.sprite.Sprite):
     def __init__(self, image, position, speed):
         super().__init__()
         self.speed = speed
@@ -59,4 +41,3 @@ class TrafficCar(pygame.sprite.Sprite):
     def update(self):
         self.rect.y += self.speed
         self.remove()
-
