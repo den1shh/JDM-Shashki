@@ -33,7 +33,7 @@ def get_coin(my_car, world):
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((500, 800))
+    screen = pygame.display.set_mode((800, 800))
     background_color = (0, 0, 0)
     pygame.display.set_caption('Traffic racer')
     sound = pygame.mixer.Sound('sounds/engine.wav')
@@ -41,23 +41,23 @@ def main():
     font = pygame.freetype.Font(None, 20)
 
     spawn_road_time = pygame.USEREVENT
-    pygame.time.set_timer(spawn_road_time, 500)
+    pygame.time.set_timer(spawn_road_time, 800)
     spawn_traffic_time = pygame.USEREVENT + 1
     pygame.time.set_timer(spawn_traffic_time, 1000)
     spawn_coin_time = pygame.USEREVENT + 2
     pygame.time.set_timer(spawn_coin_time, 1000)
 
     cars = load_cars()
-    my_car = MyCar((300, 600), cars['mercedes']['image'])
+    my_car = MyCar((300, 600), cars['supra']['image'])
 
-    road_image = pygame.image.load('img/road.png')
-    road_image = pygame.transform.scale(road_image, (500, 800))
+    road_image = pygame.image.load('img/racetrack.jpg')
+    road_image = pygame.transform.scale(road_image, (800, 800))
     
     coin_image = pygame.image.load('img/coin.png')
-    coin_image = pygame.transform.scale(coin_image, (50, 50))
+    coin_image = pygame.transform.scale(coin_image, (80, 80))
     
     
-    world = World(my_car = my_car, roads = [Item(road_image, (250, 400), 15), Item(road_image, (250, -400), 15), Item(road_image, (250, -1200), 15)])
+    world = World(my_car = my_car, roads = [Item(road_image, (400, 400), 15), Item(road_image, (400, -400), 15), Item(road_image, (400, -1200), 15)])
     
     while world.alive:
         for event in pygame.event.get():
@@ -75,7 +75,7 @@ def main():
             my_car.move()
             world.draw_all(screen, my_car)
             world.acceleration(pygame.time.get_ticks()/1000)
-            font.render_to(screen, (400, 30), str(world.time), (255, 255, 255))
+            font.render_to(screen, (800, 30), str(world.time), (255, 255, 255))
             crash(my_car, world.traffic_cars, world)
             get_coin(my_car, world)
         else:

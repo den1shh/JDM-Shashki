@@ -20,7 +20,7 @@ class World:
         self.accel = 0.1
 
     def spawn_road(self, road_image):
-        road = Item(road_image, (250, -600), self.speed)
+        road = Item(road_image, (400, -800), self.speed)
         self.roads.add(road)
 
     def spawn_traffic(self, cars):
@@ -30,7 +30,7 @@ class World:
         self.traffic_cars.add(traffic_car)
 
     def spawn_coin(self, coin_image):
-        position = (random.choice([int(500/4/2 + 500/4*i) for i in range(4)]), -40)
+        position = (random.choice([int(800/4/2 + 800/4*i) for i in range(4)]), -40)
         coin = Item(coin_image, position, self.speed)
         self.coins.add(coin)
 
