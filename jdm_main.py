@@ -1,7 +1,6 @@
 import random
 import pygame, sys
 import yaml
-import pandas as pd
 from pygame.locals import *
 from pygame import mixer
 from modules.jdm_world import World
