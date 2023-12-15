@@ -6,7 +6,7 @@ class World:
     def __init__(
             self,
             roads: list[Item],
-            my_car: MyCar,
+            time: int = 0
             ):
         self.alive = True
         self.game_status = True
@@ -15,7 +15,8 @@ class World:
         self.coins = pygame.sprite.Group()
         self.roads.add(roads)
         self.speed = 15
-        self.time = 0
+        self.time = time
+        self.game_time = 0
         self.point = 0
         self.accel = 0.1
 
@@ -24,10 +25,13 @@ class World:
         self.roads.add(road)
 
     def spawn_traffic(self, cars):
-        position = (random.randint(40, 390), random.randint(-60, -40))
+        position = (random.randint(50, 750), random.randint(-250, -200))
         speed = random.randint(self.speed - 5, self.speed - 1)
         traffic_car = Item(random.choice(list(cars.values()))['image'], position, speed)
         self.traffic_cars.add(traffic_car)
+
+    def update_road(self, spawn_road_time):
+        pygame.time.set_timer(spawn_road_time, int(400/self.speed/60*1000))
 
     def spawn_coin(self, coin_image):
         position = (random.choice([int(800/7/2 + 800/7*i) for i in range(7)]), -40)
@@ -44,5 +48,9 @@ class World:
         my_car.draw(screen)
 
     def acceleration(self, time):
+        self.game_time += time - self.time
+        self.speed = int(15 + self.game_time*self.accel/1000)
+        self.time_sync(time)
+
+    def time_sync(self, time):
         self.time = time
-        self.speed = int(15 + self.time*self.accel)

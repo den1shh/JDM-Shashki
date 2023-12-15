@@ -27,7 +27,7 @@ def crash(my_car, traffic_cars, world):
             sound.play()
             world.game_status = False
 
-def paused():
+def paused(world):
     '''поведение игры при паузе'''
     pause = True
     while pause:
@@ -51,15 +51,15 @@ def paused():
                     pygame.quit()
                     sys.exit()
 
-                
-
+        world.time_sync(pygame.time.get_ticks())        
+        
         pygame.display.update()
 
 def game_finish_screen(time, score, screen):
         '''экран конца игры'''
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         font = pygame.font.Font(None, 50)
-        timetxt = font.render(str(time), True, (0, 0, 0), (255, 255, 255))
+        timetxt = font.render(str(time/1000), True, (0, 0, 0), (255, 255, 255))
         scoretxt = font.render(str(score), True, (0, 0, 0), (255, 255, 255))
         timeRect = timetxt.get_rect()
         timeRect.center = (234, 296)
@@ -99,11 +99,13 @@ def play(choosed_car, choosed_track):
     font = pygame.freetype.Font(None, 20)
 
     spawn_road_time = pygame.USEREVENT
-    pygame.time.set_timer(spawn_road_time, 800)
+    pygame.time.set_timer(spawn_road_time, 444)
     spawn_traffic_time = pygame.USEREVENT + 1
     pygame.time.set_timer(spawn_traffic_time, 1000)
     spawn_coin_time = pygame.USEREVENT + 2
     pygame.time.set_timer(spawn_coin_time, 1000)
+    update_road_time = pygame.USEREVENT + 3
+    pygame.time.set_timer(update_road_time, 5000)
 
     cars = load_cars()
     my_car = MyCar((300, 600), cars[str(choosed_car)]['image'])
@@ -115,7 +117,7 @@ def play(choosed_car, choosed_track):
 , (80, 80))
     
     
-    world = World(my_car = my_car, roads = [Item(road_image, (400, 400), 15), Item(road_image, (400, -400), 15), Item(road_image, (400, -1200), 15)])
+    world = World(roads = [Item(road_image, (400, 400), 15), Item(road_image, (400, -400), 15), Item(road_image, (400, -1200), 15)], time = pygame.time.get_ticks())
     
     while world.alive:
         for event in pygame.event.get():
@@ -128,10 +130,12 @@ def play(choosed_car, choosed_track):
                 world.spawn_traffic(cars)
             if event.type == spawn_coin_time:
                 world.spawn_coin(coin_image)
+            if event.type == update_road_time:
+                world.update_road(spawn_road_time)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sound.set_volume(0)
-                    paused()
+                    paused(world)
                 else:
                     sound.set_volume(1)
 
@@ -139,12 +143,12 @@ def play(choosed_car, choosed_track):
         if world.game_status:
             my_car.move()
             world.draw_all(screen, my_car)
-            world.acceleration(pygame.time.get_ticks()/1000)
+            world.acceleration(pygame.time.get_ticks())
             font.render_to(screen, (800, 30), str(world.time), (255, 255, 255))
             crash(my_car, world.traffic_cars, world)
             get_coin(my_car, world)
         else:
-            game_finish_screen(world.time, world.point, screen)
+            game_finish_screen(world.game_time, world.point, screen)
             
             # font.render_to(screen, (30, 300), 'Game Over', (255, 255, 255))
             # font.render_to(screen, (30, 330), 'Your time: ' + str(world.time), (255, 255, 255))
