@@ -7,6 +7,7 @@ class MyCar:
         self.rect = self.image.get_rect()
         self.rect.center = position
         self.game_status = 'game'
+        self.energy = 7
 
     def border(self):
         if self.rect.right > 800:
@@ -26,6 +27,12 @@ class MyCar:
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+    def update(self, world):
+        self.energy -= 0.01
+        self.rect.y = 800 - self.energy * 30
+        if self.rect.top > 820:
+            world.game_status = False
+
 class Item(pygame.sprite.Sprite):
     def __init__(self, image, position, speed):
         super().__init__()
@@ -41,3 +48,8 @@ class Item(pygame.sprite.Sprite):
     def update(self):
         self.rect.y += self.speed
         self.remove()
+
+class Petrol(Item):
+    def __init__(self, energy, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.energy = energy

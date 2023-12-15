@@ -9,17 +9,16 @@ from modules.jdm_objects import Item, MyCar
 from modules.jdm_button import Button
 from pygame import mixer
 
-def load_cars(filename):
+def load(filename):
     with open("configs/" + filename, "r") as file:
         confs = yaml.safe_load(file)
-        cars = dict()
+        items = dict()
         for conf in confs:
-            cars[conf['type']] = conf
-        for car in cars.values():
-            car['image'] = pygame.image.load('img/' + car['image'])
-            car['image'] = pygame.transform.scale(car['image'], (car['width'], car['length']))
-        return cars
-            
+            items[conf['type']] = conf
+        for item in items.values():
+            item['image'] = pygame.image.load('img/' + item['image'])
+            item['image'] = pygame.transform.scale(item['image'], (item['width'], item['length']))
+        return items    
     
 def crash(my_car, traffic_cars, world):
     sound = pygame.mixer.Sound('sounds/crash.wav')
@@ -87,6 +86,12 @@ def get_coin(my_car, world):
             world.point += 1
             coin.kill()
 
+def get_energy(my_car, world):
+    for petrol in world.petrols:
+        if petrol.rect.colliderect(my_car.rect):
+            my_car.energy += petrol.energy
+            petrol.kill()
+
 def play(choosed_car, choosed_track):
     '''основное состояние игры - гонка'''
     pygame.init()
@@ -97,7 +102,7 @@ def play(choosed_car, choosed_track):
     sound = pygame.mixer.Sound('sounds/engine.wav')
     
     sound.play(-1)
-    font = pygame.freetype.Font(None, 20)
+    font = pygame.font.Font(None, 50)
 
     spawn_road_time = pygame.USEREVENT
     pygame.time.set_timer(spawn_road_time, 444)
@@ -107,10 +112,14 @@ def play(choosed_car, choosed_track):
     pygame.time.set_timer(spawn_coin_time, 1000)
     update_road_time = pygame.USEREVENT + 3
     pygame.time.set_timer(update_road_time, 5000)
+    spawn_petrol_time = pygame.USEREVENT + 4
+    pygame.time.set_timer(spawn_petrol_time, 2000)
 
-    cars = load_cars('cars.yaml')
-    my_cars = load_cars('my_cars.yaml')
+    cars = load('cars.yaml')
+    my_cars = load('my_cars.yaml')
     my_car = MyCar((300, 600), my_cars[str(choosed_car)]['image'])
+
+    petrols = load('petrol.yaml')
 
     road_image = pygame.transform.scale(pygame.image.load('img/' + str(choosed_track) + '.jpg')
 , (800, 800))
@@ -134,6 +143,8 @@ def play(choosed_car, choosed_track):
                 world.spawn_coin(coin_image)
             if event.type == update_road_time:
                 world.update_road(spawn_road_time)
+            if event.type == spawn_petrol_time:
+                world.spawn_petrol(petrols)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sound.set_volume(0)
@@ -144,24 +155,28 @@ def play(choosed_car, choosed_track):
         screen.fill(background_color)
         if world.game_status:
             my_car.move()
-            world.draw_all(screen, my_car)
+            my_car.update(world)
+            world.draw_all(screen)
+            my_car.draw(screen)
             world.acceleration(pygame.time.get_ticks())
-            font.render_to(screen, (800, 30), str(world.time), (255, 255, 255))
+            time_text = font.render("Time: " + str(world.game_time/1000), True, (0, 0, 0), (255, 255, 255))
+            score_text = font.render("Score: " + str(world.point), True, (0, 0, 0), (255, 255, 255))
+            energy_text = font.render("Energy: " + str(my_car.energy), True, (0, 0, 0), (255, 255, 255))
+            screen.blit(time_text, (600, 40))
+            screen.blit(score_text, (600, 80))
+            screen.blit(energy_text, (600, 120))
             crash(my_car, world.traffic_cars, world)
             get_coin(my_car, world)
+            get_energy(my_car, world)
         else:
             game_finish_screen(world.game_time, world.point, screen)
-            
-            # font.render_to(screen, (30, 300), 'Game Over', (255, 255, 255))
-            # font.render_to(screen, (30, 330), 'Your time: ' + str(world.time), (255, 255, 255))
-            # font.render_to(screen, (30, 360), 'Your score: ' + str(world.point), (255, 255, 255))
             sound.stop()
         
         pygame.display.flip()
         clock.tick(60)
 
 
-def get_font(size): # Returns Press-Start-2P in the desired size
+def get_font(size):
     '''для шрифта'''
     return pygame.font.Font("img/font.ttf", size)
 

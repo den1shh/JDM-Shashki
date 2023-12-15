@@ -1,0 +1,15 @@
+- type: 1
+  energy: 1
+  image: canister1.png
+  length: 80
+  width: 80
+- type: 2
+  energy: 2
+  image: canister2.png
+  length: 80
+  width: 80
+- type: 3
+  energy: 3
+  image: canister3.png
+  length: 80
+  width: 80

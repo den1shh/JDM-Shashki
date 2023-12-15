@@ -1,6 +1,6 @@
 import pygame
 import random
-from modules.jdm_objects import MyCar, Item
+from modules.jdm_objects import MyCar, Item, Petrol
 
 class World:
     def __init__(
@@ -14,6 +14,7 @@ class World:
         self.traffic_cars = pygame.sprite.Group()
         self.roads = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.petrols = pygame.sprite.Group()
         self.roads.add(roads)
         self.speed = 15
         self.time = time
@@ -43,14 +44,22 @@ class World:
         coin = Item(coin_image, position, self.speed)
         self.coins.add(coin)
 
-    def draw_all(self, screen, my_car):
+    def spawn_petrol(self, petrols):
+        petrol = random.choice(list(petrols.values()))
+        position = (random.randint(50, 750), random.randint(-250, -200))
+        petrol = Petrol(petrol['energy'], petrol['image'], position, self.speed)
+        self.petrols.add(petrol)
+
+
+    def draw_all(self, screen):
         self.roads.update()
         self.roads.draw(screen)
         self.traffic_cars.update()
         self.traffic_cars.draw(screen)
         self.coins.update()
         self.coins.draw(screen)
-        my_car.draw(screen)
+        self.petrols.update()
+        self.petrols.draw(screen)
 
     def acceleration(self, time):
         self.game_time += time - self.time
