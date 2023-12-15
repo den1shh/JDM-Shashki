@@ -6,7 +6,7 @@ from pygame.locals import *
 from pygame import mixer
 from modules.jdm_world import World
 from modules.jdm_objects import Item, MyCar
-from button import Button
+from modules.jdm_button import Button
 from pygame import mixer
 
 def load_cars():
