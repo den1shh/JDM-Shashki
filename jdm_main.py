@@ -9,8 +9,8 @@ from modules.jdm_objects import Item, MyCar
 from modules.jdm_button import Button
 from pygame import mixer
 
-def load_cars():
-    with open("configs/cars.yaml", "r") as file:
+def load_cars(filename):
+    with open("configs/" + filename, "r") as file:
         confs = yaml.safe_load(file)
         cars = dict()
         for conf in confs:
@@ -18,7 +18,8 @@ def load_cars():
         for car in cars.values():
             car['image'] = pygame.image.load('img/' + car['image'])
             car['image'] = pygame.transform.scale(car['image'], (car['width'], car['length']))
-        return cars        
+        return cars
+            
     
 def crash(my_car, traffic_cars, world):
     sound = pygame.mixer.Sound('sounds/crash.wav')
@@ -107,8 +108,9 @@ def play(choosed_car, choosed_track):
     update_road_time = pygame.USEREVENT + 3
     pygame.time.set_timer(update_road_time, 5000)
 
-    cars = load_cars()
-    my_car = MyCar((300, 600), cars[str(choosed_car)]['image'])
+    cars = load_cars('cars.yaml')
+    my_cars = load_cars('my_cars.yaml')
+    my_car = MyCar((300, 600), my_cars[str(choosed_car)]['image'])
 
     road_image = pygame.transform.scale(pygame.image.load('img/' + str(choosed_track) + '.jpg')
 , (800, 800))
