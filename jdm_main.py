@@ -1,7 +1,6 @@
 import random
 import pygame, sys
 import yaml
-from pygame.locals import *
 from pygame import mixer
 from modules.jdm_world import World
 from modules.jdm_objects import Item, MyCar
