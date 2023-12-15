@@ -2,13 +2,9 @@
   length: 197
   width: 90
   image: civic.png
-- type: mercedes
-  length: 211
-  width: 90
-  image: mercedes.png
 - type: r34
   length: 217
-  width: 70
+  width: 90
   image: r34.png
 - type: supra
   length: 211
@@ -17,8 +13,8 @@
 - type: traffic1
   length: 211
   width: 90
-  image: traffic_car2.png
-- type: traffic1
+  image: traffic_car1.png
+- type: traffic2
   length: 211
   width: 90
   image: traffic_car2.png
@@ -26,5 +22,24 @@
   length: 211
   width: 90
   image: traffic_car3.png
-
+- type: traffic4
+  length: 200
+  width: 90
+  image: traffic_car4.png
+- type: traffic5
+  length: 215
+  width: 93
+  image: traffic_car5.png
+- type: traffic6
+  length: 220
+  width: 95
+  image: traffic_car6.png
+- type: traffic7
+  length: 197
+  width: 90
+  image: traffic_car7.png
+- type: traffic8
+  length: 234
+  width: 90
+  image: traffic_car8.png
 

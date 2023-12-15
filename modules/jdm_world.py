@@ -24,13 +24,13 @@ class World:
         self.roads.add(road)
 
     def spawn_traffic(self, cars):
-        position = (random.randint(40, 460), random.randint(-60, -40))
+        position = (random.randint(40, 390), random.randint(-60, -40))
         speed = random.randint(self.speed - 5, self.speed - 1)
         traffic_car = Item(random.choice(list(cars.values()))['image'], position, speed)
         self.traffic_cars.add(traffic_car)
 
     def spawn_coin(self, coin_image):
-        position = (random.choice([int(800/4/2 + 800/4*i) for i in range(4)]), -40)
+        position = (random.choice([int(800/7/2 + 800/7*i) for i in range(7)]), -40)
         coin = Item(coin_image, position, self.speed)
         self.coins.add(coin)
 
