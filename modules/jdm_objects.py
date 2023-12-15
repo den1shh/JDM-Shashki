@@ -2,11 +2,13 @@ import pygame
 
 
 class MyCar:
+    """Класс машины игрока"""
+
     def __init__(self, position, image):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = position
-        self.game_status = 'game'
+        self.game_status = "game"
         self.energy = 7
 
     def border(self):
@@ -33,7 +35,10 @@ class MyCar:
         if self.rect.top > 820:
             world.game_status = False
 
+
 class Item(pygame.sprite.Sprite):
+    """Класс предмета на трассе, движещейся по ней с некой скоростью"""
+
     def __init__(self, image, position, speed):
         super().__init__()
         self.speed = speed
@@ -49,7 +54,10 @@ class Item(pygame.sprite.Sprite):
         self.rect.y += self.speed
         self.remove()
 
+
 class Petrol(Item):
+    """Класс канистр бензина"""
+
     def __init__(self, energy, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.energy = energy
