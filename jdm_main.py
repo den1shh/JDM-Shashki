@@ -117,7 +117,7 @@ def play(choosed_car, choosed_track):
 , (80, 80))
     
     
-    world = World(roads = [Item(road_image, (400, 400), 15), Item(road_image, (400, -400), 15), Item(road_image, (400, -1200), 15)], time = pygame.time.get_ticks())
+    world = World(roads = [Item(road_image, (400, 400), 15), Item(road_image, (400, -400), 15), Item(road_image, (400, -1200), 15)], time = pygame.time.get_ticks(), choosed_track = choosed_track)
     
     while world.alive:
         for event in pygame.event.get():

@@ -6,7 +6,8 @@ class World:
     def __init__(
             self,
             roads: list[Item],
-            time: int = 0
+            time: int = 0,
+            choosed_track: str() = 'racetrack',
             ):
         self.alive = True
         self.game_status = True
@@ -19,6 +20,10 @@ class World:
         self.game_time = 0
         self.point = 0
         self.accel = 0.1
+        if choosed_track == 'racetrack':
+            self.cols = 4
+        else:
+            self.cols = 6
 
     def spawn_road(self, road_image):
         road = Item(road_image, (400, -800), self.speed)
@@ -34,7 +39,7 @@ class World:
         pygame.time.set_timer(spawn_road_time, int(400/self.speed/60*1000))
 
     def spawn_coin(self, coin_image):
-        position = (random.choice([int(800/7/2 + 800/7*i) for i in range(7)]), -40)
+        position = (random.choice([int(800/self.cols/2 + 800/self.cols*i) for i in range(self.cols)]), -40)
         coin = Item(coin_image, position, self.speed)
         self.coins.add(coin)
 
